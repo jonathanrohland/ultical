@@ -8,14 +8,12 @@ import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
 import javax.ws.rs.client.Client;
 
-import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.glassfish.hk2.api.Factory;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Optional;
 
 import de.spinscale.dropwizard.jobs.JobsBundle;
 import de.ultical.backend.api.AuthResource;
@@ -32,13 +30,12 @@ import de.ultical.backend.api.TeamResource;
 import de.ultical.backend.api.TournamentFormatResource;
 import de.ultical.backend.api.TournamentResource;
 import de.ultical.backend.api.UserResource;
+import de.ultical.backend.auth.UlticalAuthenticator;
 import de.ultical.backend.data.DataStore;
 import de.ultical.backend.data.LocalDateMixIn;
-import de.ultical.backend.data.mapper.UserMapper;
 import de.ultical.backend.model.User;
 import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.AuthValueFactoryProvider;
-import io.dropwizard.auth.AuthenticationException;
 import io.dropwizard.auth.Authenticator;
 import io.dropwizard.auth.CachingAuthenticator;
 import io.dropwizard.auth.basic.BasicCredentialAuthFilter;
@@ -168,29 +165,7 @@ public class Application extends io.dropwizard.Application<UltiCalConfig> {
          * depends on the tournament-format or tournament-edition that is to be
          * changed.
          */
-        Authenticator<BasicCredentials, User> authenticator = new Authenticator<BasicCredentials, User>() {
-
-            @Override
-            public Optional<User> authenticate(BasicCredentials credentials) throws AuthenticationException {
-                final String providedUserName = credentials.getUsername();
-                final String providedPassword = credentials.getPassword();
-                SqlSession sqlSession = mbm.provide();
-                User user = null;
-                try {
-                    UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
-                    user = userMapper.getByEmail(providedUserName);
-                } catch (PersistenceException pe) {
-                    throw new AuthenticationException("Accessing the database failed", pe);
-                } finally {
-                    sqlSession.close();
-                }
-                Optional<User> result = Optional.absent();
-                if (user != null && user.getPassword().equals(providedPassword)) {
-                    result = Optional.of(user);
-                }
-                return result;
-            }
-        };
+        Authenticator<BasicCredentials, User> authenticator = new UlticalAuthenticator(mbm);
 
         CachingAuthenticator<BasicCredentials, User> cachingAuthenticator = new CachingAuthenticator<BasicCredentials, User>(
                 env.metrics(), authenticator, config.getAuthenticationCache());
