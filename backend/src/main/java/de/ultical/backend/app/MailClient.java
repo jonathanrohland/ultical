@@ -64,7 +64,7 @@ public class MailClient {
         String getSenderName();
     }
 
-    public void sendMail(UlticalMessage m) {
+    public boolean sendMail(UlticalMessage m) {
         Objects.requireNonNull(m, "You must not pass a null-value!");
 
         try {
@@ -134,9 +134,42 @@ public class MailClient {
 
         } catch (NoSuchProviderException npe) {
             LOGGER.error("Failed to open transport", npe);
+            return false;
         } catch (MessagingException me) {
-            LOGGER.error("Failed to build message", me);
+            LOGGER.error("Failed to build or send message");
+            LOGGER.error("Subject: " + m.getSubject());
+            LOGGER.error("From: " + m.getSenderName());
+
+            String toString = "";
+            for (Recipient recipient : m.getRecipients(UlticalRecipientType.TO)) {
+                toString += (recipient.getName() + " <" + recipient.getEmail() + ">");
+            }
+            LOGGER.error("To: " + toString);
+
+            String ccString = "";
+            for (Recipient recipient : m.getRecipients(UlticalRecipientType.CC)) {
+                ccString += (recipient.getName() + " <" + recipient.getEmail() + ">");
+            }
+            LOGGER.error("CC: " + ccString);
+
+            String bccString = "";
+            for (Recipient recipient : m.getRecipients(UlticalRecipientType.BCC)) {
+                bccString += (recipient.getName() + " <" + recipient.getEmail() + ">");
+            }
+            LOGGER.error("BCC: " + bccString);
+
+            String replyToString = "";
+            for (Recipient recipient : m.getRecipients(UlticalRecipientType.REPLY_TO)) {
+                replyToString += (recipient.getName() + " <" + recipient.getEmail() + ">");
+            }
+            LOGGER.error("ReplyTo: " + replyToString);
+
+            LOGGER.error(me.toString());
+
+            return false;
         }
+
+        return true;
     }
 
     private String getEncodedNameAddress(Recipient recipient) {

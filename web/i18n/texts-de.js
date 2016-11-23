@@ -56,7 +56,7 @@ TRANSLATIONS['de'] = {
 			body: 'Nachrichtentext',
 			successTitle: 'Nachricht erfolgreich gesendet!',
 			successText: 'Du erhälst eine Kopie an die angegebene Antwortadresse.',
-			failure: 'Es ist ein unbekannter Fehler aufgetreten. Bitte versuche es später erneut.',
+			failure: 'Es ist ein unbekannter Fehler aufgetreten. Bitte kontrolliere noch einmal die angegebene Antwortadresse.',
 			authorDescriptionText: 'Diese Email wurde von {{ authorName }} über dfv-turniere.de versendet.',
 			subjectFrom: 'Nachricht von {{ senderName }}',
 			subjectTo: 'Nachricht für {{ receiverName }}',
@@ -275,6 +275,8 @@ TRANSLATIONS['de'] = {
 				doneEditStandings: 'Ergebnisse speichern',
 				standingsRank: 'Platzierung',
 				standingsSpirit: 'Spirit (Fremd/Eigen)',
+				notQualified: 'Nicht qualifiziert',
+				notQualifiedTooptip: 'Das Team hat sich auf diesem Qualifikationsturnier nicht für ein weiteres Turnier qualifiziert (Roster wird freigegeben)',
 			},
 			edit: {
 				buttonLabel: 'Turnier bearbeiten',
@@ -323,6 +325,7 @@ TRANSLATIONS['de'] = {
 				player: 'Spieler',
 				players: 'Spieler',
 				notLoggedIn: 'Spieler sind nur für angemeldete Benutzer sichtbar',
+				eligibleUntil: 'spielberechtigt bis',
 			},
 			edit: {
 				deleteTeam: 'Team löschen',

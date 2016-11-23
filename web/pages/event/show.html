@@ -52,7 +52,7 @@
 			<!-- DATE / SEASON -->
 			<div class="row" ng-if="show.date">
 				<div class="col-xs-7 page-sub-title">
-					{{ event.startDate | amDateFormat : ('general.amDateFromSameMonth' | translate) }} - {{ event.endDate | amDateFormat : ('general.amDateToFull' | translate) }}<br />
+					<span ng-if="event.startDate != event.endDate">{{ event.startDate | amDateFormat : ('general.amDateFromSameMonth' | translate) }} - </span><span>{{ event.endDate | amDateFormat : ('general.amDateToFull' | translate) }}</span><br />
 				</div>
 				<div class="col-xs-5 text-right page-sub-title">{{ edition.season | season : true}}</div>
 			</div>
@@ -349,7 +349,8 @@
 																<span>{{ 'event.teamList.standingsSpirit' | translate }}</span>
 																<input type="text" ng-model="regTeam.spiritScore" />/
 																<input type="text" ng-model="regTeam.ownSpiritScore" />
-
+																<span ng-if="format.x.own" data-title="{{ 'event.teamList.notQualifiedTooptip' | translate }}" bs-tooltip>{{ 'event.teamList.notQualified' | translate }}</span>
+																<input ng-if="format.x.own" data-title="{{ 'event.teamList.notQualifiedTooptip' | translate }}" bs-tooltip type="checkbox" ng-model="regTeam.notQualified" />
 															</bas>
 
 														</h3>
@@ -409,14 +410,14 @@
 			<div ng-if="show.edition && edition.events.length > 0 && tabs.activeTab == 'events'" class="row margin-top">
 				<div class="col-md-12" id="edition-view-events">
 
-					<div class="row" ng-repeat="listEvent in (orderedEvents = (edition.events | orderBy : ['startDate', 'name']))">
+					<div class="row" ng-repeat="listEvent in (orderedEvents = (edition.events | orderBy : ['startDate', 'endDate', 'name']))">
 						<div class="col-md-12">
 							<a ui-sref="app.eventShow({eventId: listEvent.id, eventSlug: (( listEvent | eventname) | slugify ) })">
 								<div class="col-md-12 event-list-row" ng-init="showDate = orderedEvents[$index - 1].startDate != listEvent.startDate || orderedEvents[$index - 1].endDate != listEvent.endDate">
 
 									<div class="event-list-date event-list-date-left">{{ showDate ? (listEvent.startDate | amDateFormat : 'D') : '' }}</div>
-									<div class="event-list-date event-list-date-dash">{{ showDate ? '-' : '' }}</div>
-									<div class="event-list-date event-list-date-right">{{ showDate ? (listEvent.endDate | amDateFormat : 'D') : '' }}</div>
+									<div class="event-list-date event-list-date-dash"><span ng-if="listEvent.startDate != listEvent.endDate">{{ showDate ? '-' : '' }}</span></div>
+									<div class="event-list-date event-list-date-right"><span ng-if="listEvent.startDate != listEvent.endDate">{{ showDate ? (listEvent.endDate | amDateFormat : 'D') : '' }}</span></div>
 									<div class="event-list-date event-list-date-right-month" ng-class="{'event-list-date-right-monthyear' : showYearSeparator }">{{ showDate ? (listEvent.endDate | amDateFormat : 'MMMM') : '' }} {{ showYearSeparator ? (listEvent.endDate | amDateFormat : 'YY') : '' }}</div>
 
 									<div class="event-list-text">

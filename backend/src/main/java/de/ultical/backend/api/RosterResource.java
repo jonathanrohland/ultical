@@ -60,7 +60,7 @@ public class RosterResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Roster addRoster(@Auth User currentUser, @NotNull Roster newRoster) throws Exception {
+    public Roster addRoster(@Auth @NotNull User currentUser, @NotNull Roster newRoster) throws Exception {
         if (this.dataStore == null) {
             throw new WebApplicationException("Dependency Injectino for data store failed!",
                     Status.INTERNAL_SERVER_ERROR);
@@ -86,7 +86,7 @@ public class RosterResource {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Roster updateRoster(@Auth User currentUser, @NotNull Roster updatedRoster) throws Exception {
+    public Roster updateRoster(@Auth @NotNull User currentUser, @NotNull Roster updatedRoster) throws Exception {
         if (this.dataStore == null) {
             throw new WebApplicationException("Dependency Injection for data store failed!",
                     Status.INTERNAL_SERVER_ERROR);
@@ -127,7 +127,7 @@ public class RosterResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{rosterId}")
-    public Player addPlayerToRoster(@Auth User currentUser, @PathParam("rosterId") Integer rosterId,
+    public Player addPlayerToRoster(@Auth @NotNull User currentUser, @PathParam("rosterId") Integer rosterId,
             @NotNull DfvMvName dfvMvName) throws Exception {
         if (this.dataStore == null) {
             throw new WebApplicationException("Dependency Injection for data store failed!",
@@ -170,12 +170,22 @@ public class RosterResource {
                 dfvPlayer.setLastName(dfvMvName.getLastName());
                 dfvPlayer.setEmail(dfvMvPlayer.getEmail());
 
-                Club club = this.dataStore.getClub(dfvMvPlayer.getVerein());
+                Club club = this.dataStore.getClub(dfvMvPlayer.getClub());
                 dfvPlayer.setClub(club);
 
                 player = dfvPlayer;
 
                 this.dataStore.storeDfvPlayer(dfvPlayer);
+            }
+
+            /*
+             * check if found player is an active or passive player. If the
+             * player is passive, an addition to an roster is not allowed.
+             */
+            if (!player.isEligible()) {
+                throw new WebApplicationException(
+                        "e102 - Player is registered as a passive player. Passive players are not allowed to participate in tournaments.",
+                        Status.EXPECTATION_FAILED);
             }
 
             this.checkPlayerEligibility(roster, player);

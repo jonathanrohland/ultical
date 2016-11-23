@@ -2,7 +2,7 @@ html, body {
 	height: 100%;
 	font-size: 13px;
 	font-weight: 300;
-	min-width: 320px;
+	min-width: 350px;
 }
 
 .view-container {
@@ -79,6 +79,10 @@ button, input, optgroup, select, textarea {
 	td.mega-wide {
 		width: 50%;
 	}
+
+	.navbar-language .navbar-text {
+		height: 40px;
+	}
 }
 
 #nav-logo div {
@@ -108,17 +112,14 @@ button, input, optgroup, select, textarea {
 
 #navbar-language-icon {
 	float: left;
-	font-size: 25px;
-	margin-top: 6px;
-	margin-left: 20px;
+	font-size: 22px;
+	margin-top: -2px;
 }
 
 #navbar-language-code {
-	float: right;
-	margin-top: 15px;
-	margin-bottom: 15px;
-	margin-right: 20px;
+	float: left;
 	margin-left: 5px;
+	width: 20px;
 }
 
 .navbar-body ul {
@@ -140,6 +141,7 @@ button, input, optgroup, select, textarea {
 }
 
 .navbar-body > ul:hover,
+.navbar-body > ul:focus,
 /*.navbar-body ul:hover .navbar-text,*/
 .menu-aside-body ul:hover .navbar-text,
 .menu-aside-body ul:focus .navbar-text,
@@ -156,8 +158,10 @@ button, input, optgroup, select, textarea {
 	cursor: pointer;
 }
 
-.navbar-language:hover #navbar-language-icon, .navbar-language:hover #navbar-language-code
-	{
+.navbar-language:hover #navbar-language-icon,
+.navbar-language:focus #navbar-language-icon,
+.navbar-language:hover #navbar-language-code
+.navbar-language:focus #navbar-language-code {
 	color: #000000;
 }
 
@@ -236,6 +240,7 @@ input, textarea {
 
 .editable-list-item {
 	float: left;
+	margin-bottom: 10px;
 	border-color: #B3B3B3;
 	border-width: 1px;
 	border-style: solid;
@@ -257,7 +262,8 @@ input, textarea {
 	opacity: 0;
 }
 
-.editable-list:hover .editable-list-remove {
+.editable-list:hover .editable-list-remove,
+.editable-list:focus .editable-list-remove {
 	opacity: 1;
 }
 
@@ -273,7 +279,8 @@ input, textarea {
 	margin-top: 6px;
 }
 
-.panel-heading:hover .team-actions {
+.panel-heading:hover .team-actions,
+	.panel-heading:focus .team-actions {
 	opacity: 1;
 }
 
@@ -288,7 +295,8 @@ input, textarea {
 	margin-left: 7px;
 }
 
-.roster-list:hover .player-actions {
+.roster-list:hover .player-actions,
+	.roster-list:focus .player-actions {
 	opacity: 1;
 }
 
@@ -321,7 +329,8 @@ input, textarea {
 .btn-primary.btn-ultical, .label-primary.label-ultical {
 	background-color: #20408E;
 }
-.btn-primary.btn-ultical:hover {
+.btn-primary.btn-ultical:hover,
+	.btn-primary.btn-ultical:focus {
 	background-color: #286090;
 }
 
@@ -410,7 +419,8 @@ select:not([multiple]) {
     margin-top: 10px;
 }
 
-.event-list-row:hover {
+.event-list-row:hover,
+	.event-list-row:focus {
   background-color: #C2DAF3;
 	cursor: pointer;
 }

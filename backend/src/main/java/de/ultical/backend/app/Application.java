@@ -28,6 +28,7 @@ import de.ultical.backend.api.MailResource;
 import de.ultical.backend.api.RegisterResource;
 import de.ultical.backend.api.RosterResource;
 import de.ultical.backend.api.SeasonResource;
+import de.ultical.backend.api.SitemapResource;
 import de.ultical.backend.api.TeamResource;
 import de.ultical.backend.api.TournamentFormatResource;
 import de.ultical.backend.api.TournamentResource;
@@ -155,6 +156,7 @@ public class Application extends io.dropwizard.Application<UltiCalConfig> {
         env.jersey().register(MailResource.class);
         env.jersey().register(ClubResource.class);
         env.jersey().register(ContextResource.class);
+        env.jersey().register(SitemapResource.class);
 
         env.jersey().register(UlticalLoggingFilter.class);
 
@@ -210,6 +212,13 @@ public class Application extends io.dropwizard.Application<UltiCalConfig> {
         if (config.isCorsFilterEnabled()) {
             this.addCorsFilter(env);
         }
+
+	/*
+	 * add overall admins
+	 */
+	if (config.getOverallAdmins() != null) {
+	    config.getOverallAdmins().stream().forEach(de.ultical.backend.app.Authenticator::addAdmin);
+	}
     }
 
     /*

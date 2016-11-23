@@ -992,6 +992,24 @@
 	<changeSet author="bas" id="bas83">
 		<tagDatabase tag="ultical_bas_v.1.16" />
 	</changeSet>
+	<changeSet author="bb" id="bb84">
+		<addColumn tableName="DFV_MV_NAME">
+			<column name="last_modified" type="TIMESTAMP" />
+		</addColumn>
+	</changeSet>
+	<changeSet author="bb" id="bb85">
+		<addNotNullConstraint tableName="DFV_MV_NAME"
+			columnName="last_modified" columnDataType="TIMESTAMP"
+			defaultNullValue="2016-01-01" />
+	</changeSet>
+	<changeSet author="bb" id="bb86">
+		<addColumn tableName="DFV_PLAYER">
+			<column name="last_modified" type="TIMESTAMP"
+				defaultValueDate="2016-01-01 00:00:00">
+				<constraints nullable="false" />
+			</column>
+		</addColumn>
+	</changeSet>
 	<changeSet author="bas" id="bas-editionshow-1">
 		<addColumn tableName="TOURNAMENT_EDITION">
 			<column name="name" type="VARCHAR(200)" />
@@ -1067,5 +1085,45 @@
 		<addUniqueConstraint columnNames="path,event"
 			tableName="RESOURCE" constraintName="uk_resource_path_event" />
 	</changeSet>
-
+	<changeSet author="bas" id="bas-div-1">
+		<addUniqueConstraint columnNames="tournament_format, admin"
+			tableName="TOURNAMENT_FORMAT_ULTICAL_USERS" constraintName="uk_tournament_format_ultical_users" />
+	</changeSet>
+	<changeSet author="bb" id="bb-eligible-1">
+		<addColumn tableName="DFV_PLAYER">
+			<column name="eligible_until" type="TIMESTAMP" value="null"
+				defaultValueDate="null" />
+		</addColumn>
+	</changeSet>
+	<changeSet author="bb" id="bb-eligible-2">
+		<tagDatabase tag="v1.18"></tagDatabase>
+	</changeSet>
+	<changeSet id="bas-bugfix-reserved-words" author="bas">
+		<renameColumn tableName="RESOURCE" oldColumnName="path"
+			newColumnName="location_path" columnDataType="VARCHAR(255)" />
+		<renameColumn tableName="RESOURCE" oldColumnName="local"
+			newColumnName="is_local" columnDataType="BOOLEAN" />
+	</changeSet>
+	<changeSet id="bas-bugfix-reserved-words-2" author="bas">
+		<addNotNullConstraint tableName="RESOURCE"
+			columnName="location_path" columnDataType="VARCHAR(255)" />
+		<addNotNullConstraint tableName="RESOURCE"
+			columnName="is_local" columnDataType="BOOLEAN" />
+	</changeSet>
+	<changeSet id="bas-team-renames-1" author="bas">
+		<addColumn tableName="TEAM_REGISTRATION">
+			<column name="team_name" type="VARCHAR(255)" defaultValue="">
+				<constraints nullable="false" />
+			</column>
+		</addColumn>
+	</changeSet>
+	<changeSet id="bas-team-renames-2" author="bas">
+		<sql dbms="mysql" endDelimiter=";">
+			UPDATE TEAM_REGISTRATION SET
+			team_name = (TRIM((SELECT
+			CONCAT_WS (' ', TEAM.name,
+			ROSTER.name_addition) FROM TEAM LEFT JOIN ROSTER ON ROSTER.team =
+			TEAM.id WHERE ROSTER.id = TEAM_REGISTRATION.roster)));
+		</sql>
+	</changeSet>
 </databaseChangeLog>

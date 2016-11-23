@@ -219,7 +219,7 @@ public class MailResource {
             // get all team admins and email addresses
             List<Recipient> recipients = new ArrayList<Recipient>();
             for (Team team : teams) {
-                if (!team.getContactEmail().isEmpty()) {
+                if (team.getContactEmail() != null && !team.getContactEmail().isEmpty()) {
                     recipients.add(new Recipient(team.getContactEmail()));
                 }
                 for (String email : team.getEmails().split(",")) {
@@ -234,9 +234,10 @@ public class MailResource {
 
             message.addRecipients(UlticalRecipientType.BCC, recipients);
 
-            this.mailClient.sendMail(message);
+            if (!this.mailClient.sendMail(message)) {
+                throw new WebApplicationException("Error sending Mail", Status.INTERNAL_SERVER_ERROR);
+            }
         }
-
         return true;
     }
 
@@ -317,11 +318,12 @@ public class MailResource {
 
             message.addRecipients(UlticalRecipientType.BCC, recipients);
 
-            this.mailClient.sendMail(message);
+            if (!this.mailClient.sendMail(message)) {
+                throw new WebApplicationException("Error sending Mail", Status.INTERNAL_SERVER_ERROR);
+            }
         } catch (Exception e) {
             throw new WebApplicationException(500);
         }
-
         return true;
     }
 
@@ -360,12 +362,13 @@ public class MailResource {
 
             message.addRecipients(UlticalRecipientType.BCC, recipients);
 
-            this.mailClient.sendMail(message);
+            if (!this.mailClient.sendMail(message)) {
+                throw new WebApplicationException("Error sending Mail", Status.INTERNAL_SERVER_ERROR);
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage() + e.getStackTrace());
             throw new WebApplicationException(500);
         }
-
         return true;
     }
 }

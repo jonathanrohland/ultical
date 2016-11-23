@@ -269,7 +269,7 @@ angular.module('ultical.events')
       }
     }
 
-    if ($scope.show.event && $scope.event.admins.length > 0) {
+    if ($scope.show.event && ($scope.event.admins.length > 0 || ($scope.event.localOrganizer != null && $scope.event.localOrganizer.email != null))) {
       actionBar.addAction({
         group: 'contact-event',
         needLogIn: null,
@@ -492,9 +492,12 @@ angular.module('ultical.events')
 			// remove players that have been added after the event started
 			var relevantPlayers = [];
 			var startDate = moment(event.startDate);
+			var endDate = moment(event.endDate);
 			angular.forEach(regTeam.roster.players, function(rosterPlayer) {
 				if (moment(rosterPlayer.dateAdded).isBefore(startDate)) {
-					relevantPlayers.push(rosterPlayer);
+					if (!rosterPlayer.player.eligibleUntil || moment(rosterPlayer.player.eligibleUntil).isAfter(endDate)) {
+						relevantPlayers.push(rosterPlayer);
+					}
 				}
 			});
 

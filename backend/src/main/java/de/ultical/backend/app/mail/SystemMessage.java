@@ -48,7 +48,7 @@ public class SystemMessage implements UlticalMessage {
         default:
             this.setSenderName("DFV-Turniere");
             this.setGreetings("Hallo");
-            this.setGoodbye("Viele Grüße,");
+            this.setGoodbye("Viele Grüße");
             this.setGoodbyeName("DFV-Turniere");
         }
     }
@@ -96,7 +96,7 @@ public class SystemMessage implements UlticalMessage {
                 recipientName = recipient;
             }
         }
-        if (!recipientName.isEmpty()) {
+        if (recipientName != null && !recipientName.isEmpty()) {
             sb.append(" ").append(recipientName);
         }
         sb.append(",").append(nl).append(nl);
