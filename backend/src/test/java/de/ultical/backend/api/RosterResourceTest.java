@@ -198,7 +198,6 @@ public class RosterResourceTest {
 
         when(this.dfvName17yoWoman.getDfvNumber()).thenReturn(DFV_NUMBER_17YO_WOMAN);
         when(this.dfvName17yoWoman.isDse()).thenReturn(Boolean.TRUE);
-        when(this.dfvName17yoWoman.isActive()).thenReturn(Boolean.TRUE);
         when(this.player17yoWoman.getGender()).thenReturn(Gender.FEMALE);
         when(this.player17yoWoman.isEligible()).thenReturn(Boolean.TRUE);
         when(this.player17yoWoman.getBirthDate()).thenReturn(LocalDate.of(1999, 5, 6));

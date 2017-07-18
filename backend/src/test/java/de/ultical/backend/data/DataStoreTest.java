@@ -62,7 +62,6 @@ public class DataStoreTest {
         result.setFirstName(fn);
         result.setLastName(ln);
         result.setDfvnr(dfvNr);
-        result.setActive(active);
         return result;
     }
 

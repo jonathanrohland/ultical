@@ -16,7 +16,6 @@ public class DfvMvName {
     private boolean dse;
     private int dfvNumber;
     private Club club;
-    private boolean active;
 
     private LocalDateTime lastModified;
 

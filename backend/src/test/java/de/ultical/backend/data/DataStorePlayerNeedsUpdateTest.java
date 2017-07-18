@@ -38,7 +38,6 @@ public class DataStorePlayerNeedsUpdateTest {
 
     private DfvMvName buildName(String fn, String ln, int dfvNr, boolean act, LocalDateTime date) {
         DfvMvName firstName = new DfvMvName();
-        firstName.setActive(act);
         firstName.setFirstName(fn);
         firstName.setLastName(ln);
         firstName.setDfvnr(dfvNr);
